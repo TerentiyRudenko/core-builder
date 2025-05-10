@@ -19,10 +19,10 @@ export default defineConfig({
       '@sections': path.resolve(__dirname, 'src/sections'),
     },
   },
-  server: {
-    open: true,
-    port: 3000,
-  },
+  // server: {
+  //   open: true,
+  //   port: 3000,
+  // },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

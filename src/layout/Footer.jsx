@@ -1,20 +1,18 @@
 // src/layout/Footer.jsx
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
-const Footer = () => {
-  return (
-    <FooterWrapper>
-      <p>© {new Date().getFullYear()} All rights reserved.</p>
-    </FooterWrapper>
-  )
-}
-
-const FooterWrapper = styled.footer`
-  padding: 24px 0;
-  background: #f1f1f1;
+const Foot = styled.footer`
+  padding: 1rem;
   text-align: center;
-  font-size: 14px;
-`
+  background: #0d1b2a;
+  color: #e0e1dd;
+`;
 
-export default Footer
+const Footer = () => (
+  <Foot>
+    © {new Date().getFullYear()} CoreBuilder. All rights reserved.
+  </Foot>
+);
+
+export default Footer;

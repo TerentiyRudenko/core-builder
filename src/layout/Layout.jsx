@@ -1,30 +1,26 @@
 // src/layout/Layout.jsx
-import React from 'react'
-import styled from 'styled-components'
-import Header from './Header'
-import Footer from './Footer'
+import React from 'react';
+import styled from 'styled-components';
+import { NavBar } from '../components/NavBar';
+import Hero from '../components/Hero';
+import IntroSection from '../components/IntroSection';
+import TechnologiesSection from '../components/TechnologiesSection';
+import Footer from './Footer';
 
-const Container = styled.div`
-  max-width: 1645px;
-  margin: 0 auto;
-  padding: 0 16px;
-`
+const Main = styled.main`
+  padding-top: 67px;
+  `
 
 const Layout = ({ children }) => {
   return (
     <>
-      <Header />
-      <MainWrapper>
-        <Container>{children}</Container>
-      </MainWrapper>
+      <NavBar />
+      <Hero />
+      <IntroSection />
+      <TechnologiesSection />
       <Footer />
     </>
-  )
-}
+  );
+};
 
-const MainWrapper = styled.main`
-  flex: 1;
-  padding: 40px 0;
-`
-
-export default Layout
+export default Layout;
