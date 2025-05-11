@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 const StyledSection = styled.section`
   position: relative;
   width: 100%;
-  height: 680px;
+  height: 600px;
   background: #0f0f1c;
   overflow: hidden;
   display: flex;

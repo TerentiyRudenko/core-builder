@@ -2,11 +2,15 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, scale } from 'framer-motion';
 import ReactIcon from "@assets/react.svg";
 import NodeIcon from "@assets/node.svg";
 import JavaScriptIcon from "@assets/javascript.png";
 import TypeScriptIcon from "@assets/typescript.png"; 
+import WordPressIcon from "@assets/wordpress.png";
+import nextjsIcon from "@assets/next-js.svg";
+import framerMotionIcon from "@assets/framerMotion.svg";
+import cssIcon from "@assets/css.png";
 
 const Section = styled.section`
   padding: 4rem 2rem;
@@ -26,8 +30,16 @@ const Title = styled.h2`
 const Grid = styled.div`
   display: grid;
   gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   justify-items: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Card = styled(motion.div)`
@@ -79,6 +91,36 @@ const technologies = [
     name: 'TypeScript',
     image: TypeScriptIcon,
     description: 'A strongly typed programming language that builds on JavaScript.',
+  },
+  {
+    name: "WordPress",
+    image: WordPressIcon,
+    description: "A content management system (CMS) that allows you to create and manage websites easily.",
+  },
+  {
+    name: 'Next.js',
+    image: nextjsIcon,
+    description: 'A React framework for server-side rendering and static site generation.',
+  },
+  {
+    name: 'Tailwind CSS',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1200px-Tailwind_CSS_Logo.svg.png',
+    description: 'A utility-first CSS framework for rapid UI development.',
+  },
+  {
+    name: 'Framer Motion',
+    image: framerMotionIcon,
+    description: 'A production-ready motion library for React.',
+  },
+  {
+    name: 'HTML',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1200px-HTML5_logo_and_wordmark.svg.png',
+    description: 'The standard markup language for creating web pages.',
+  },
+  {
+    name: 'CSS',
+    image: cssIcon,
+    description: 'A style sheet language used for describing the presentation of a document written in HTML.',
   },
 ];
 
