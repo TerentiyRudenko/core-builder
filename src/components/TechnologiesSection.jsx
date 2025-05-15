@@ -122,6 +122,11 @@ const technologies = [
     image: cssIcon,
     description: 'A style sheet language used for describing the presentation of a document written in HTML.',
   },
+  {
+    name: 'SQL',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/MySQL.svg/1200px-MySQL.svg.png',
+    description: 'A standard language for managing and manipulating databases.',
+  }
 ];
 
 const TechnologiesSection = () => {
@@ -135,9 +140,15 @@ const TechnologiesSection = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
           >
+            <motion.div
+            initial={{ scale: 0.8, opacity: 0, y: 0 }}
+            whileInView={{ x: 0, y: 5, scale: 1.1, opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.4, delay: index * 0.2 }}>
             <Icon src={tech.image} alt={tech.name} />
+            </motion.div>
             <TechName>{tech.name}</TechName>
             <Description>{tech.description}</Description>
           </Card>

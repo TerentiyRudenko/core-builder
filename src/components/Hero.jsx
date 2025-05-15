@@ -24,6 +24,15 @@ const Title = styled(motion.h1)`
   font-weight: 800;
   margin-bottom: 1rem;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: textAnimation 7s ease-in-out infinite;
+
+  @keyframes textAnimation {
+    0% { color: #00c3ff; }
+    25% { color: #7fffff; }
+    50% { color: #ffff9f; }
+    75% { color: white; }
+    100% { color: #00c3ff; }
+  }
 `;
 
 const Subtitle = styled(motion.p)`

@@ -47,7 +47,7 @@ const IntroSection = () => {
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut' }}
-        viewport={{ once: true }}
+        viewport={{ once: false, amount: 1 }}
       >
         <Title>Create Your Unique Website</Title>
         <Description>

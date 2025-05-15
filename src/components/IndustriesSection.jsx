@@ -73,6 +73,11 @@ const industries = [
     description: 'Custom platforms with fast performance and smooth UX that drive conversion and loyalty.',
     color: '#42275a',
   },
+  {
+    name: 'Telegram Apps and Bots',
+    description: 'We create custom Telegram bots and applications that enhance communication and engagement.',
+    color: 'blue',
+  }
 ];
 
 const IndustriesSection = () => {

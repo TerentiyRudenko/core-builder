@@ -34,7 +34,7 @@ const Menu = styled.div`
   color: #e0e1dd;
 `;
 
-const menuItems = ['Home', 'Features', 'Pricing', 'Contact'];
+const menuItems = ['Home', 'Our cases', 'Industries', 'Technologies', 'Contact'];
 
 export const NavBar = () => (
   <Nav>
