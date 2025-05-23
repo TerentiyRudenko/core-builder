@@ -7,6 +7,7 @@ import Layout from './layout/Layout';
 import GoalTime from './pages/case-pages/Goaltime';
 import LunarAliens from './pages/case-pages/LunarAliens';
 import CasesSection from './components/CasesSection';
+import ScrollToTop from "./ScrollTop";
 import App from "./App";
 import "./index.css";
 
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         {" "}
         {/* оберни App в BrowserRouter */}
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/cases">

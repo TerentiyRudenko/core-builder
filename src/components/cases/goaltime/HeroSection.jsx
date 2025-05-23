@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
-  const [scrollY, setScrollY] = useState(0)
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const words = ["News", "Events", "Analytics", "Ukraine"]
+  const words = ["News", "Events", "Analytics", "Ukraine"];
 
   return (
     <Section
@@ -32,10 +32,17 @@ const HeroSection = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8 }}
+            whileHover={{
+              scale: 1.08,
+              y: -5,
+              textShadow: "0 0 20px rgba(79,172,254,0.8)",
+              transition: { duration: 0.2, ease: "easeOut" },
+            }}
           >
             GoalTime
           </Logo>
         </LogoWrapper>
+
         <Headline
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +57,20 @@ const HeroSection = () => {
               key={i}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + i * 0.1 }}
+              transition={{ delay: 0.6 + i * 0.1 }} // это только для появления
+              whileHover={{
+                translateY: -10,
+                scale: 1.1,
+                boxShadow: "0 4px 15px rgba(79, 172, 254, 0.4)",
+                transition: { duration: 0.1, ease: "linear" }, // быстро при наведении
+              }}
+              // 🔽 добавь `whileTap` или `exit`, если нужно еще быстрее реагировать на уход
+              exit={{
+                scale: 1,
+                translateY: 0,
+                boxShadow: "none",
+                transition: { delay: 0, duration: 0 }, // мгновенно
+              }}
               className="carousel-word"
             >
               {word}
@@ -63,7 +83,8 @@ const HeroSection = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          Up-to-date news with daily updates.<br />
+          Up-to-date news with daily updates.
+          <br />
           Created by CoreBuider for people, optimized for all devices.
         </Description>
         <ButtonGroup>
@@ -77,7 +98,7 @@ const HeroSection = () => {
             Explore
           </PrimaryButton>
 
-          <SecondaryButton
+          {/* <SecondaryButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 20 }}
@@ -85,27 +106,39 @@ const HeroSection = () => {
             transition={{ delay: 1.3 }}
           >
             Go to GoalTime
-          </SecondaryButton>
+          </SecondaryButton> */}
         </ButtonGroup>
 
         <ScrollIndicator
           animate={{
             y: [0, 10, 0],
-            opacity: [0.6, 1, 0.6]
+            opacity: [0.6, 1, 0.6],
           }}
           transition={{
             y: { repeat: Infinity, duration: 1.5 },
-            opacity: { repeat: Infinity, duration: 1.5 }
+            opacity: { repeat: Infinity, duration: 1.5 },
           }}
         >
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 5L12 19M12 19L18 13M12 19L6 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 5L12 19M12 19L18 13M12 19L6 13"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </ScrollIndicator>
       </HeroContent>
     </Section>
-  )
-}
+  );
+};
 
 const BackgroundParticles = () => {
   return (
@@ -119,24 +152,24 @@ const BackgroundParticles = () => {
             width: `${Math.random() * 10 + 2}px`,
             height: `${Math.random() * 10 + 2}px`,
             animationDuration: `${Math.random() * 10 + 10}s`,
-            animationDelay: `${Math.random() * 5}s`
+            animationDelay: `${Math.random() * 5}s`,
           }}
           animate={{
             y: [0, -30, 0],
-            opacity: [0.2, 0.8, 0.2]
+            opacity: [0.2, 0.8, 0.2],
           }}
           transition={{
             repeat: Infinity,
             duration: Math.random() * 5 + 5,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       ))}
     </ParticlesContainer>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;
 
 const Section = styled(motion.section)`
   position: relative;
@@ -145,8 +178,8 @@ const Section = styled(motion.section)`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #0A0E1A 0%, #1C2331 100%);
-`
+  background: linear-gradient(135deg, #0a0e1a 0%, #1c2331 100%);
+`;
 
 const ParticlesContainer = styled.div`
   position: absolute;
@@ -156,14 +189,18 @@ const ParticlesContainer = styled.div`
   height: 100%;
   overflow: hidden;
   z-index: 1;
-`
+`;
 
 const Particle = styled(motion.div)`
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(79, 172, 254, 0.1));
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.5),
+    rgba(79, 172, 254, 0.1)
+  );
   pointer-events: none;
-`
+`;
 
 const HeroContent = styled(motion.div)`
   position: relative;
@@ -174,28 +211,27 @@ const HeroContent = styled(motion.div)`
   text-align: center;
   max-width: 1000px;
   padding: 0 2rem;
-`
+`;
 
 const LogoWrapper = styled.div`
   margin-bottom: 1.5rem;
-`
+`;
 
 const Logo = styled(motion.div)`
   font-size: 2rem;
   font-weight: 800;
-  font-family: 'Montserrat', sans-serif;
-  color: white;
+  font-family: "Montserrat", sans-serif;
+  color: #4facfe;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -206,7 +242,7 @@ const Logo = styled(motion.div)`
     backdrop-filter: blur(4px);
     z-index: -1;
   }
-`
+`;
 
 const Headline = styled(motion.h1)`
   font-size: 4.5rem;
@@ -227,7 +263,7 @@ const Headline = styled(motion.h1)`
   @media (max-width: 768px) {
     font-size: 3rem;
   }
-`
+`;
 
 const WordCarousel = styled.div`
   display: flex;
@@ -261,7 +297,7 @@ const WordCarousel = styled.div`
       background: rgba(0, 242, 254, 0.2);
     }
   }
-`
+`;
 
 const Description = styled(motion.p)`
   font-size: 1.4rem;
@@ -273,7 +309,7 @@ const Description = styled(motion.p)`
   @media (max-width: 768px) {
     font-size: 1.2rem;
   }
-`
+`;
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -285,7 +321,7 @@ const ButtonGroup = styled.div`
     width: 100%;
     max-width: 300px;
   }
-`
+`;
 
 const PrimaryButton = styled(motion.button)`
   padding: 1rem 2.5rem;
@@ -306,7 +342,7 @@ const PrimaryButton = styled(motion.button)`
   @media (max-width: 480px) {
     width: 100%;
   }
-`
+`;
 
 const SecondaryButton = styled(motion.button)`
   padding: 1rem 2.5rem;
@@ -326,7 +362,7 @@ const SecondaryButton = styled(motion.button)`
   @media (max-width: 480px) {
     width: 100%;
   }
-`
+`;
 
 const ScrollIndicator = styled(motion.div)`
   position: absolute;
@@ -334,4 +370,4 @@ const ScrollIndicator = styled(motion.div)`
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
-`
+`;

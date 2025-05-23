@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import goaltimeScreen from '@assets/cases-images/goaltime.png'
+import DeviceMockups from '../../../DeviceMockups'
 
 const GallerySection = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -46,6 +47,7 @@ const GallerySection = () => {
         <SectionSubtitle>Seeing is Believing</SectionSubtitle>
       </SectionHeader>
 
+      <DeviceMockups>
       <ImagesContainer>
         {images.map((image, i) => (
           <ImageWrapper
@@ -68,6 +70,7 @@ const GallerySection = () => {
           </ImageWrapper>
         ))}
       </ImagesContainer>
+      </DeviceMockups>
 
       <BackgroundGlow top="30%" left="20%" size="300px" color="rgba(79, 172, 254, 0.06)" />
       <BackgroundGlow top="60%" left="70%" size="350px" color="rgba(0, 242, 254, 0.05)" />

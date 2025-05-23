@@ -119,13 +119,13 @@ const CTA = () => {
               />
               Get Started
             </CTAButton>
-            <AlternativeContact>
+            {/* <AlternativeContact>
               <span>Or call us directly:</span>
               <PhoneLink href="tel:+1234567890">
                 <FontAwesomeIcon icon={faPhone} />
                 +1 (234) 567-890
               </PhoneLink>
-            </AlternativeContact>
+            </AlternativeContact> */}
           </CTAContainer>
         ) : (
           <>
