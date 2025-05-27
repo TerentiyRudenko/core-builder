@@ -53,31 +53,41 @@ const ImageGallery = () => {
           <SectionSubtitle>
             Visual showcase of the final product
           </SectionSubtitle>
-          <DevicesContainer>
-          <DeviceSwitcher>
-            {["tablet", "phone"].map((device) => (
-              <SwitchButton
-                key={device}
-                onClick={() => handleDeviceChange(device)}
-                className={selectedDevice === device ? "active" : ""}
+          <InfoCard
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <InfoTitle
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
               >
-                {device === "tablet" ? "📟 Tablet" : "📱 Phone"}
-              </SwitchButton>
-            ))}
-          </DeviceSwitcher>
-            <Device3DContainer>
-            <Device3DModels
-                deviceType={selectedDevice}
-                imageUrl={selectedDevice === "tablet" ? tabletImage : phoneImage}
-            />
-            </Device3DContainer>
-            <InfoCard>
-                <InfoTitle>
                 {selectedDevice === "tablet"
-                    ? "$GRIT Token Presale"
-                    : "Lunar Aliens Telegram App"}
-                </InfoTitle>
+                  ? "$GRIT Token Presale"
+                  : "Lunar Aliens Telegram App"}
+              </InfoTitle>
             </InfoCard>
+          <DevicesContainer>
+            <DeviceSwitcher>
+              {["tablet", "phone"].map((device) => (
+                <SwitchButton
+                  key={device}
+                  onClick={() => handleDeviceChange(device)}
+                  className={selectedDevice === device ? "active" : ""}
+                >
+                  {device === "tablet" ? "📟 Tablet" : "📱 Phone"}
+                </SwitchButton>
+              ))}
+            </DeviceSwitcher>
+            <Device3DContainer>
+              <Device3DModels
+                deviceType={selectedDevice}
+                imageUrl={
+                  selectedDevice === "tablet" ? tabletImage : phoneImage
+                }
+              />
+            </Device3DContainer>
           </DevicesContainer>
         </SectionHeader>
         {/* <Gallery>
@@ -157,7 +167,7 @@ const DeviceSwitcher = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem; /* Уменьшил отступ снизу */
 `;
 
 const SwitchButton = styled.button`
@@ -185,6 +195,7 @@ const SwitchButton = styled.button`
 const DevicesContainer = styled.div`
   position: relative;
   height: 500px;
+  margin-top: 2rem; /* Добавил отступ сверху */
 `;
 
 const DevicesHeader = styled(motion.div)`
@@ -225,25 +236,25 @@ const Device3DContainer = styled(motion.div)`
   height: 100%;
 `;
 
-const InfoCard = styled.div`
+const InfoCard = styled(motion.div)`
   display: flex;
   align-items: center;
-  justify-content: center; // Добавляем центрирование по горизонтали
+  justify-content: center;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 1.5rem 2rem; /* Уменьшил вертикальный padding */
   background: rgba(0, 0, 0, 0.4);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   max-width: 600px;
-  margin: 0 auto; // Центрируем карточку по горизонтали
-  text-align: center; // Центрируем текст внутри
+  margin: 2rem auto; /* Добавил внешний отступ сверху/снизу */
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    padding: 1.2rem; /* Уменьшил padding на мобильных */
+    margin: 1.5rem auto; /* Меньшие отступы на маленьких экранах */
     gap: 1rem;
-    padding: 1.5rem;
-    width: 90%; // Добавляем отступы по бокам на мобильных
   }
 `;
 
@@ -256,13 +267,30 @@ const InfoContent = styled.div`
   flex: 1;
 `;
 
-const InfoTitle = styled.h4`
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #fff;
+const InfoTitle = styled(motion.h4)`
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(79, 172, 254, 0.2);
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem; /* Уменьшил отступ снизу */
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border-radius: 2px;
+  }
 `;
-
 const InfoDescription = styled.p`
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.7);

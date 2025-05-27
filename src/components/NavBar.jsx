@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 const Nav = styled.nav`
-  width: auto;
+  width: 100%;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -15,7 +15,6 @@ const Nav = styled.nav`
   right: 0;
   left: 0;
   z-index: 1000;
-  perspective: 1000px;
 `;
 
 const Logo = styled(motion.div)`
@@ -23,34 +22,65 @@ const Logo = styled(motion.div)`
   font-weight: bold;
   color: #e0e1dd;
   cursor: pointer;
-  transform-style: preserve-3d;
-  
 `;
 
 const Menu = styled.div`
   display: flex;
   gap: 2rem;
   font-weight: 500;
-  color: #e0e1dd;
 `;
 
-const menuItems = ['Home', 'Our cases', 'Industries', 'Technologies', 'Contact'];
+const MenuItem = styled(motion.a)`
+  color: #e0e1dd;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #ffff1c;
+  }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+
+// Названия и соответствующие id секций
+const menuItems = [
+  { label: 'Home', target: 'hero' },
+  { label: 'Our cases', target: 'cases' },
+  { label: 'Industries', target: 'industries' },
+  { label: 'Technologies', target: 'tech' },
+  { label: 'Contact', target: 'contact' }
+];
 
 export const NavBar = () => (
   <Nav>
-    <Logo>
-      CoreBuilder
-    </Logo>
-    <Menu>
-      {menuItems.map(item => (
-        <motion.div
-          key={item}
-          whileHover={{ scale: 1.2, rotateX: 20 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          {item}
-        </motion.div>
-      ))}
-    </Menu>
+    <Container>
+      <Logo
+        whileHover={{ rotateY: 15 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        CoreBuilder
+      </Logo>
+      <Menu>
+        {menuItems.map(({ label, target }) => (
+          <MenuItem
+            key={label}
+            href={`#${target}`}
+            whileHover={{ scale: 1.1, rotateX: 15 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            {label}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Container>
   </Nav>
 );

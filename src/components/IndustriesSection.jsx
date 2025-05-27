@@ -111,7 +111,9 @@ const IndustriesSection = () => {
   const backgroundColor = useTransform(scrollYProgress, inputRange, outputRange);
 
   return (
+    <section id="industries">
     <Container ref={ref} $count={industries.length}>
+    <h3>Scroll down</h3>
       <StickySection>
         <Background style={{ backgroundColor }} />
 
@@ -121,6 +123,8 @@ const IndustriesSection = () => {
           const start = Math.max(0, (index * sectionLength) - 0.1);
           const peak = index * sectionLength + (sectionLength / 2);
           const end = Math.min(1, ((index + 1) * sectionLength) + 0.1);
+
+          <section id={index}></section>
           
           // Создаем более сложные кривые анимации для плавности
           const localProgress = useTransform(
@@ -151,6 +155,7 @@ const IndustriesSection = () => {
           );
 
           return (
+            <>          
             <ContentBlock 
               key={index} 
               style={{ opacity, y }}
@@ -176,10 +181,12 @@ const IndustriesSection = () => {
                 </Description>
               </ContentWrapper>
             </ContentBlock>
+            </>
           );
         })}
       </StickySection>
     </Container>
+    </section>
   );
 };
 

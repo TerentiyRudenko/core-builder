@@ -131,6 +131,7 @@ const technologies = [
 
 const TechnologiesSection = () => {
   return (
+    <section id="tech">
     <Section>
       <Title>Technologies We Use</Title>
       <Grid>
@@ -155,6 +156,7 @@ const TechnologiesSection = () => {
         ))}
       </Grid>
     </Section>
+    </section>
   );
 };
 

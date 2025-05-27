@@ -6,6 +6,7 @@ import Hero from '../components/Hero';
 import IntroSection from '../components/IntroSection';
 import TechnologiesSection from '../components/TechnologiesSection';
 import IndustriesSection from '../components/IndustriesSection';
+import AIIntegration from '../components/AIIntegration';
 import CasesSection from '../components/CasesSection';
 import TestimonialsSection from '../components/Testimonials';
 import CTA from '../components/CTA';
@@ -23,6 +24,7 @@ const Layout = ({ children }) => {
       <IntroSection />
       <TechnologiesSection />
       <IndustriesSection />
+      <AIIntegration />
       <CasesSection />
       <TestimonialsSection />
       <CTA />

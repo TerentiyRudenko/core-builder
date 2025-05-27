@@ -17,6 +17,7 @@
     "framer-motion": "^12.9.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.3",
     "react-tsparticles": "^2.12.2",
     "styled-components": "^6.1.17",
@@ -24,6 +25,8 @@
     "tsparticles": "^3.8.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.3",
+    "@babel/preset-react": "^7.27.1",
     "@eslint/js": "^9.25.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
