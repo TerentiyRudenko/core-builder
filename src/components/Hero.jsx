@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from "react";
+import styled, { keyframes } from "styled-components";
+import { motion } from "framer-motion";
+import * as THREE from "three";
 
 // Анимации для фона
 const float = keyframes`
@@ -36,13 +37,47 @@ const glitch = keyframes`
   90% { transform: translate(-2px, 2px); }
 `;
 
+const wave = keyframes`
+  0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+  25% { transform: translateY(-10px) rotateZ(1deg); }
+  50% { transform: translateY(-20px) rotateZ(0deg); }
+  75% { transform: translateY(-10px) rotateZ(-1deg); }
+`;
+
+const matrix = keyframes`
+  0% { transform: translateY(-100vh); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+`;
+
+const energyWave = keyframes`
+  0% { 
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% { 
+    transform: scale(3) rotate(360deg);
+    opacity: 0;
+  }
+`;
+
 const HeroSection = styled.section`
   width: 100%;
   min-height: 100vh;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(0, 255, 127, 0.05) 0%, transparent 50%),
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(0, 255, 255, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 0, 255, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(0, 255, 127, 0.1) 0%,
+      transparent 50%
+    ),
     linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   display: flex;
   align-items: center;
@@ -67,14 +102,13 @@ const HeroSection = styled.section`
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-      repeating-linear-gradient(
+    background: repeating-linear-gradient(
         90deg,
         transparent,
         transparent 98px,
@@ -90,7 +124,7 @@ const HeroSection = styled.section`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -106,38 +140,130 @@ const HeroSection = styled.section`
   }
 `;
 
-const BackgroundElements = styled.div`
+const ThreeJSCanvas = styled.canvas`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
+  pointer-events: none;
+`;
+
+const BackgroundElements = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
+
+const MatrixRain = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+`;
+
+const MatrixColumn = styled.div`
+  position: absolute;
+  top: -100vh;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  color: rgba(0, 255, 255, 0.6);
+  white-space: pre;
+  line-height: 14px;
+  animation: ${matrix} ${(props) => props.duration}s linear infinite;
+  animation-delay: ${(props) => props.delay}s;
+  text-shadow: 0 0 5px currentColor;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    line-height: 12px;
+    color: rgba(0, 255, 255, 0.4);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    line-height: 10px;
+    color: rgba(0, 255, 255, 0.3);
+  }
+`;
+
+const EnergyOrb = styled(motion.div)`
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(0, 255, 255, 0.8),
+    rgba(0, 255, 255, 0.4),
+    rgba(0, 255, 255, 0.1),
+    transparent
+  );
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.6),
+    inset 0 0 50px rgba(0, 255, 255, 0.2);
+  animation: ${wave} 4s ease-in-out infinite;
+  animation-delay: ${(props) => props.delay}s;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ${energyWave} 2s ease-out infinite;
+    animation-delay: ${(props) => props.delay}s;
+  }
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.5),
+      inset 0 0 40px rgba(0, 255, 255, 0.2);
+  }
+
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4),
+      inset 0 0 30px rgba(0, 255, 255, 0.1);
+  }
 `;
 
 const FloatingShape = styled(motion.div)`
   position: absolute;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  border: 2px solid ${props => props.color};
-  border-radius: ${props => props.rounded ? '50%' : '0'};
-  background: ${props => `linear-gradient(45deg, ${props.color}20, transparent)`};
-  animation: ${float} ${props => props.duration}s ease-in-out infinite;
-  animation-delay: ${props => props.delay}s;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  border: 2px solid ${(props) => props.color};
+  border-radius: ${(props) => (props.rounded ? "50%" : "0")};
+  background: ${(props) =>
+    `linear-gradient(45deg, ${props.color}20, transparent)`};
+  animation: ${float} ${(props) => props.duration}s ease-in-out infinite;
+  animation-delay: ${(props) => props.delay}s;
   backdrop-filter: blur(1px);
-  box-shadow: 0 0 20px ${props => props.color}40;
+  box-shadow: 0 0 20px ${(props) => props.color}40;
 
   @media (max-width: 768px) {
-    width: ${props => Math.max(props.size * 0.7, 30)}px;
-    height: ${props => Math.max(props.size * 0.7, 30)}px;
-    box-shadow: 0 0 15px ${props => props.color}30;
+    width: ${(props) => Math.max(props.size * 0.7, 30)}px;
+    height: ${(props) => Math.max(props.size * 0.7, 30)}px;
+    box-shadow: 0 0 15px ${(props) => props.color}30;
   }
 
   @media (max-width: 480px) {
-    width: ${props => Math.max(props.size * 0.5, 20)}px;
-    height: ${props => Math.max(props.size * 0.5, 20)}px;
-    box-shadow: 0 0 10px ${props => props.color}20;
-    animation-duration: ${props => props.duration * 1.5}s;
+    width: ${(props) => Math.max(props.size * 0.5, 20)}px;
+    height: ${(props) => Math.max(props.size * 0.5, 20)}px;
+    box-shadow: 0 0 10px ${(props) => props.color}20;
+    animation-duration: ${(props) => props.duration * 1.5}s;
   }
 `;
 
@@ -149,8 +275,8 @@ const RotatingRing = styled.div`
   border-radius: 50%;
   border-top: 2px solid #00ffff;
   animation: ${rotate} 20s linear infinite;
-  top: ${props => props.top}%;
-  left: ${props => props.left}%;
+  top: ${(props) => props.top}%;
+  left: ${(props) => props.left}%;
   transform: translateZ(50px);
 
   @media (max-width: 768px) {
@@ -184,7 +310,7 @@ const HexGrid = styled.svg`
 
   @media (max-width: 480px) {
     opacity: 0.04;
-    display: none; /* Скрываем на очень маленьких экранах для производительности */
+    display: none;
   }
 `;
 
@@ -198,7 +324,7 @@ const ContentWrapper = styled.div`
 
   @media (max-width: 768px) {
     max-width: 90%;
-    transform-style: flat; /* Упрощаем 3D на планшетах */
+    transform-style: flat;
   }
 
   @media (max-width: 480px) {
@@ -211,36 +337,21 @@ const Title = styled(motion.h1)`
   font-size: clamp(2rem, 8vw, 6rem);
   font-weight: 900;
   margin-bottom: 1rem;
-  background: linear-gradient(
-    45deg,
-    #00ffff,
-    #ff00ff,
-    #00ff7f,
-    #00ffff
-  );
+  background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff7f, #00ffff);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: ${pulse} 3s ease-in-out infinite;
-  text-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.5),
-    0 0 20px rgba(0, 255, 255, 0.3),
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3),
     0 0 30px rgba(0, 255, 255, 0.2);
-  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
   transform: translateZ(50px);
   line-height: 1.1;
-  
-  &:hover {
-    animation: ${glitch} 0.3s ease-in-out;
-  }
 
   @media (max-width: 768px) {
     font-size: clamp(1.8rem, 7vw, 4rem);
     transform: translateZ(30px);
-    text-shadow: 
-      0 0 8px rgba(0, 255, 255, 0.4),
-      0 0 15px rgba(0, 255, 255, 0.2);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4), 0 0 15px rgba(0, 255, 255, 0.2);
     filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4));
     margin-bottom: 0.8rem;
   }
@@ -252,10 +363,6 @@ const Title = styled(motion.h1)`
     filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3));
     margin-bottom: 0.5rem;
     line-height: 1.2;
-    
-    &:hover {
-      animation: none; /* Отключаем глитч на мобильных */
-    }
   }
 
   @media (max-width: 320px) {
@@ -271,7 +378,7 @@ const Subtitle = styled(motion.p)`
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  transform: translateZ(30px) translateX(220px);
+  transform: translateZ(30px) translateX(200px);
   font-weight: 300;
   letter-spacing: 0.5px;
 
@@ -285,8 +392,7 @@ const Button = styled(motion.button)`
   font-size: 1.1rem;
   border: 2px solid transparent;
   border-radius: 50px;
-  background: 
-    linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+  background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
     linear-gradient(45deg, #00ffff, #ff00ff, #00ff7f) border-box;
   color: #00ffff;
   font-weight: 600;
@@ -300,9 +406,9 @@ const Button = styled(motion.button)`
   transform: translateZ(40px);
   backdrop-filter: blur(10px);
   min-width: 200px;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -318,11 +424,10 @@ const Button = styled(motion.button)`
   }
 
   &:hover {
-    box-shadow: 
-      0 0 20px rgba(0, 255, 255, 0.6),
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6),
       inset 0 0 20px rgba(0, 255, 255, 0.1);
     transform: translateZ(50px) translateY(-2px);
-    
+
     &::before {
       left: 100%;
     }
@@ -360,8 +465,7 @@ const Button = styled(motion.button)`
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 
-        0 0 15px rgba(0, 255, 255, 0.5),
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5),
         inset 0 0 15px rgba(0, 255, 255, 0.1);
     }
 
@@ -376,12 +480,10 @@ const Button = styled(motion.button)`
     min-width: 140px;
   }
 
-  /* Улучшенная поддержка touch-устройств */
   @media (hover: none) and (pointer: coarse) {
     &:hover {
       transform: translateZ(40px);
-      box-shadow: 
-        0 0 15px rgba(0, 255, 255, 0.4),
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4),
         inset 0 0 15px rgba(0, 255, 255, 0.1);
     }
   }
@@ -396,10 +498,6 @@ const ArrowDown = styled(motion.div)`
   color: #00ffff;
   z-index: 10;
   filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8));
-  
-  &:hover {
-    animation: ${glitch} 0.2s ease-in-out;
-  }
 `;
 
 const ParticleSystem = styled.div`
@@ -415,41 +513,240 @@ const Particle = styled(motion.div)`
   position: absolute;
   width: 2px;
   height: 2px;
-  background: ${props => props.color};
+  background: ${(props) => props.color};
   border-radius: 50%;
-  box-shadow: 0 0 10px ${props => props.color};
+  box-shadow: 0 0 10px ${(props) => props.color};
 `;
 
 const Hero = () => {
-  const fullText = 'Build. Innovate. Dominate.';
-  const [typedText, setTypedText] = useState('');
+  const fullText = "Build. Innovate. Dominate.";
+  const [typedText, setTypedText] = useState("");
   const [index, setIndex] = useState(0);
   const [particles, setParticles] = useState([]);
+  const [matrixColumns, setMatrixColumns] = useState([]);
+  const canvasRef = useRef(null);
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const animationRef = useRef(null);
 
-  // Создание частиц с адаптацией под размер экрана
+  // Инициализация Three.js сцены
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    // Создание сцены, камеры и рендерера
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvasRef.current,
+      alpha: true,
+      antialias: true,
+    });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    sceneRef.current = scene;
+    rendererRef.current = renderer;
+
+    // Создание 3D объектов
+    const geometries = [];
+    const materials = [];
+    const meshes = [];
+
+    // Тор
+    const torusGeometry = new THREE.TorusGeometry(2, 0.3, 16, 100);
+    const torusMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.6,
+    });
+    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+    torus.position.set(-8, 2, -5);
+    scene.add(torus);
+    meshes.push(torus);
+
+    // Икосаэдр
+    const icosahedronGeometry = new THREE.IcosahedronGeometry(1.5, 1);
+    const icosahedronMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff00ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.7,
+    });
+    const icosahedron = new THREE.Mesh(
+      icosahedronGeometry,
+      icosahedronMaterial
+    );
+    icosahedron.position.set(8, -2, -3);
+    scene.add(icosahedron);
+    meshes.push(icosahedron);
+
+    // Октаэдр
+    const octahedronGeometry = new THREE.OctahedronGeometry(1.2);
+    const octahedronMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ff7f,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.8,
+    });
+    const octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
+    octahedron.position.set(0, 4, -8);
+    scene.add(octahedron);
+    meshes.push(octahedron);
+
+    // Создание частиц
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleCount = window.innerWidth < 768 ? 1000 : 2000;
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 50;
+      positions[i + 1] = (Math.random() - 0.5) * 50;
+      positions[i + 2] = (Math.random() - 0.5) * 50;
+
+      const colorChoice = Math.random();
+      if (colorChoice < 0.33) {
+        colors[i] = 0;
+        colors[i + 1] = 1;
+        colors[i + 2] = 1; // cyan
+      } else if (colorChoice < 0.66) {
+        colors[i] = 1;
+        colors[i + 1] = 0;
+        colors[i + 2] = 1; // magenta
+      } else {
+        colors[i] = 0;
+        colors[i + 1] = 1;
+        colors[i + 2] = 0.5; // green
+      }
+    }
+
+    particleGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+    particleGeometry.setAttribute(
+      "color",
+      new THREE.BufferAttribute(colors, 3)
+    );
+
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.02,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+    });
+
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
+
+    camera.position.z = 5;
+
+    // Анимационный цикл
+    const animate = () => {
+      animationRef.current = requestAnimationFrame(animate);
+
+      // Анимация мешей
+      meshes[0].rotation.x += 0.005;
+      meshes[0].rotation.y += 0.01;
+
+      meshes[1].rotation.x += 0.008;
+      meshes[1].rotation.z += 0.006;
+
+      meshes[2].rotation.y += 0.012;
+      meshes[2].rotation.x += 0.004;
+
+      // Анимация частиц
+      particleSystem.rotation.y += 0.002;
+      const positions = particleSystem.geometry.attributes.position.array;
+      for (let i = 1; i < positions.length; i += 3) {
+        positions[i] += Math.sin(Date.now() * 0.001 + i) * 0.001;
+      }
+      particleSystem.geometry.attributes.position.needsUpdate = true;
+
+      // Движение камеры
+      camera.position.x = Math.sin(Date.now() * 0.0005) * 2;
+      camera.position.y = Math.cos(Date.now() * 0.0003) * 1;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Обработка изменения размера окна
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      renderer.dispose();
+      geometries.forEach((geo) => geo.dispose());
+      materials.forEach((mat) => mat.dispose());
+    };
+  }, []);
+
+  // Создание эффекта матрицы
+  useEffect(() => {
+    const characters =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZабвгдежзийклмнопрстуфхцчшщъыьэюя";
+    const columns = Math.floor(window.innerWidth / 20);
+    const newColumns = [];
+
+    for (let i = 0; i < columns; i++) {
+      const columnText = Array.from(
+        { length: 50 },
+        () => characters[Math.floor(Math.random() * characters.length)]
+      ).join("\n");
+
+      newColumns.push({
+        id: i,
+        text: columnText,
+        left: `${i * 20}px`,
+        duration: 8 + Math.random() * 6,
+        delay: Math.random() * 10,
+      });
+    }
+
+    setMatrixColumns(newColumns);
+  }, []);
+
+  // Создание частиц
   useEffect(() => {
     const getParticleCount = () => {
-      if (window.innerWidth < 480) return 20; // Меньше частиц на мобильных
-      if (window.innerWidth < 768) return 35; // Средне для планшетов
-      return 50; // Полное количество для десктопа
+      if (window.innerWidth < 480) return 20;
+      if (window.innerWidth < 768) return 35;
+      return 50;
     };
 
     const newParticles = [];
     const particleCount = getParticleCount();
-    
+
     for (let i = 0; i < particleCount; i++) {
       newParticles.push({
         id: i,
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        color: ['#00ffff', '#ff00ff', '#00ff7f'][Math.floor(Math.random() * 3)],
+        color: ["#00ffff", "#ff00ff", "#00ff7f"][Math.floor(Math.random() * 3)],
         delay: Math.random() * 5,
-        duration: 3 + Math.random() * 4
+        duration: 3 + Math.random() * 4,
       });
     }
     setParticles(newParticles);
 
-    // Обновляем частицы при изменении размера окна
     const handleResize = () => {
       const newCount = getParticleCount();
       if (newCount !== particles.length) {
@@ -459,31 +756,33 @@ const Hero = () => {
             id: i,
             x: Math.random() * window.innerWidth,
             y: Math.random() * window.innerHeight,
-            color: ['#00ffff', '#ff00ff', '#00ff7f'][Math.floor(Math.random() * 3)],
+            color: ["#00ffff", "#ff00ff", "#00ff7f"][
+              Math.floor(Math.random() * 3)
+            ],
             delay: Math.random() * 5,
-            duration: 3 + Math.random() * 4
+            duration: 3 + Math.random() * 4,
           });
         }
         setParticles(updatedParticles);
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
 
   const handleClick = () => {
-    scrollToSection('intro');
+    scrollToSection("intro");
   };
 
   useEffect(() => {
@@ -491,16 +790,15 @@ const Hero = () => {
       const timeout = setTimeout(() => {
         setTypedText((prev) => prev + fullText[index]);
         setIndex(index + 1);
-      }, 120);
+      }, 20);
       return () => clearTimeout(timeout);
     }
   }, [index]);
 
-  // Создание шестиугольной сетки с адаптацией
+  // Создание шестиугольной сетки
   const createHexPattern = () => {
     const hexagons = [];
-    
-    // Адаптивные параметры сетки
+
     const getGridParams = () => {
       if (window.innerWidth < 480) {
         return { rows: 4, cols: 6, hexSize: 20 };
@@ -512,154 +810,135 @@ const Hero = () => {
     };
 
     const { rows, cols, hexSize } = getGridParams();
-    
+
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const x = col * hexSize * 1.5 + (row % 2) * hexSize * 0.75;
         const y = row * hexSize * 0.87;
-        
+
         hexagons.push(
           <motion.polygon
             key={`${row}-${col}`}
-            points={`${hexSize},0 ${hexSize*0.75},${hexSize*0.42} ${hexSize*0.25},${hexSize*0.42} 0,0 ${hexSize*0.25},${-hexSize*0.42} ${hexSize*0.75},${-hexSize*0.42}`}
-            fill="none"
-            stroke="rgba(0, 255, 255, 0.3)"
-            strokeWidth="0.5"
-            transform={`translate(${x}, ${y})`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.5, 0] }}
-            transition={{
-              duration: 4,
-              delay: (row + col) * 0.1,
-              repeat: Infinity,
-              repeatDelay: 2
-            }}
+            points={`${hexSize},0 ${hexSize * 0.75},${hexSize * 0.42} ${
+              hexSize * 0.25
+            },${hexSize * 0.42} 0,0 ${hexSize * 0.25},${-hexSize * 0.42} ${
+              hexSize * 0.75
+            },${-hexSize * 0.42}`}
+            fill="rgba(0, 255, 255, 0.03)"
+            stroke="rgba(0, 255, 255, 0.08)"
+            strokeWidth="0.3"
+            transform={`translate(${x},${y})`}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: Math.random() * 0.5 }}
           />
         );
       }
     }
-    
     return hexagons;
   };
 
   return (
-    <section id='hero'>
-      <HeroSection>
-        <BackgroundElements>
-          <HexGrid>
-            {createHexPattern()}
-          </HexGrid>
-          
-          <ParticleSystem>
-            {particles.map(particle => (
-              <Particle
-                key={particle.id}
-                color={particle.color}
-                initial={{ 
-                  x: particle.x, 
-                  y: particle.y, 
-                  opacity: 0,
-                  scale: 0 
-                }}
-                animate={{ 
-                  y: particle.y - 200,
-                  opacity: [0, 1, 0],
-                  scale: [0, 1, 0]
-                }}
-                transition={{
-                  duration: particle.duration,
-                  delay: particle.delay,
-                  repeat: Infinity,
-                  ease: "easeOut"
-                }}
-              />
-            ))}
-          </ParticleSystem>
+    <HeroSection>
+      {/* <ThreeJSCanvas ref={canvasRef} /> */}
 
-          <FloatingShape 
-            size={60} 
-            color="#00ffff" 
-            duration={6} 
-            delay={0}
-            style={{top: '20%', left: '10%'}}
-          />
-          <FloatingShape 
-            size={40} 
-            color="#ff00ff" 
-            duration={8} 
-            delay={1}
-            rounded
-            style={{top: '70%', right: '15%'}}
-          />
-          <FloatingShape 
-            size={80} 
-            color="#00ff7f" 
-            duration={10} 
-            delay={2}
-            style={{top: '40%', right: '20%'}}
-          />
-          
-          <RotatingRing top={15} left={75} />
-          <RotatingRing top={65} left={5} />
-        </BackgroundElements>
+      <HexGrid>
+        <g transform="rotate(15)">{createHexPattern()}</g>
+      </HexGrid>
 
-        <ContentWrapper>
-          <Title
-            initial={{ opacity: 0, y: 50, rotateY: -180 }}
-            animate={{ opacity: 1, y: 0, rotateY: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+      <BackgroundElements>
+        {matrixColumns.map((column) => (
+          <MatrixColumn
+            key={column.id}
+            style={{ left: column.left }}
+            duration={column.duration}
+            delay={column.delay}
           >
-            {typedText}
-          </Title>
-          
-          {index === fullText.length && (
-            <>
-              <Subtitle
-                initial={{ opacity: 0, /*y: 30, z: -100*/ }}
-                animate={{ opacity: 1, /*y: 0, z: 0*/ }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-              >
-                CoreBuilder transforms your digital presence with cutting-edge, bespoke websites that transcend reality and enter the digital metaverse.
-              </Subtitle>
-              
-              <Button
-                initial={{ opacity: 0, y: 30, rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
-                whileHover={{ 
-                  scale: 1.05,
-                  rotateY: 5,
-                  transition: { duration: 0.2 }
-                }}
-                whileTap={{ 
-                  scale: 0.95,
-                  rotateY: -5,
-                  transition: { duration: 0.1 }
-                }}
-                onClick={handleClick}
-              >
-                Initialize System
-              </Button>
-              
-              <ArrowDown
-                animate={{
-                  y: [0, 15, 0],
-                  opacity: [0.7, 1, 0.7]
-                }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                onClick={handleClick}
-              >
-                ⟱
-              </ArrowDown>
-            </>
-          )}
-        </ContentWrapper>
-      </HeroSection>
-    </section>
+            {column.text}
+          </MatrixColumn>
+        ))}
+
+        <EnergyOrb delay={0.2} style={{ top: "20%", left: "10%" }} />
+        <EnergyOrb delay={0.5} style={{ top: "70%", left: "80%" }} />
+
+        <FloatingShape
+          color="#00ffff"
+          size={40}
+          duration={8}
+          delay={0}
+          style={{ top: "30%", left: "85%" }}
+        />
+        <FloatingShape
+          color="#ff00ff"
+          size={30}
+          duration={6}
+          delay={0.3}
+          rounded
+          style={{ top: "60%", left: "15%" }}
+        />
+
+        <RotatingRing top={20} left={80} />
+        <RotatingRing top={70} left={20} />
+      </BackgroundElements>
+
+      <ContentWrapper>
+        <Title
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5 }}
+        >
+          {typedText}
+        </Title>
+
+        <Subtitle
+          initial={{ opacity: 0, /*x: 100*/ }}
+          animate={{ opacity: 1, /*x: 0*/ }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          CoreBuilder transforms your digital presence with cutting-edge,
+          bespoke websites that transcend reality and enter the digital
+          metaverse.
+        </Subtitle>
+
+        <Button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleClick}
+        >
+          Explore Now
+        </Button>
+
+        <ArrowDown
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          onClick={() => scrollToSection("content")}
+        >
+          ↓
+        </ArrowDown>
+      </ContentWrapper>
+
+      <ParticleSystem>
+        {particles.map((particle) => (
+          <Particle
+            key={particle.id}
+            style={{
+              left: particle.x,
+              top: particle.y,
+              backgroundColor: particle.color,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              x: [0, Math.random() * 50 - 25, 0],
+            }}
+            transition={{
+              duration: particle.duration,
+              repeat: Infinity,
+              delay: particle.delay,
+            }}
+          />
+        ))}
+      </ParticleSystem>
+    </HeroSection>
   );
 };
 
