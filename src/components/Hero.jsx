@@ -3,6 +3,87 @@ import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 
+// Система брейкпоинтов
+const breakpoints = {
+  xs: 320,
+  sm: 480,
+  md: 768,
+  lg: 1024,
+  xl: 1200,
+  xxl: 1440,
+};
+
+// Функция для генерации media queries
+const media = Object.keys(breakpoints).reduce((acc, label) => {
+  acc[label] = (...args) => css`
+    @media (max-width: ${breakpoints[label]}px) {
+      ${css(...args)}
+    }
+  `;
+  return acc;
+}, {});
+
+// Responsive функция для масштабирования значений
+const responsive = (values) => {
+  const sortedBreakpoints = Object.entries(breakpoints).sort(
+    (a, b) => b[1] - a[1]
+  );
+
+  return sortedBreakpoints
+    .map(([key, size]) => {
+      if (values[key]) {
+        return css`
+          @media (max-width: ${size}px) {
+            ${values[key]}
+          }
+        `;
+      }
+      return "";
+    })
+    .join("");
+};
+
+// Функция для fluid типографики
+const fluidSize = (minSize, maxSize, minVw = 320, maxVw = 1200) => {
+  return `clamp(${minSize}rem, ${minSize}rem + (${maxSize} - ${minSize}) * ((100vw - ${minVw}px) / (${maxVw} - ${minVw})), ${maxSize}rem)`;
+};
+
+// Конфигурация для разных устройств
+const deviceConfig = {
+  xxl: { particles: 50, matrixColumns: 60, hexSize: 35 },
+  xl: { particles: 45, matrixColumns: 50, hexSize: 30 },
+  lg: { particles: 35, matrixColumns: 40, hexSize: 25 },
+  md: { particles: 25, matrixColumns: 30, hexSize: 20 },
+  sm: { particles: 15, matrixColumns: 20, hexSize: 15 },
+  xs: { particles: 10, matrixColumns: 15, hexSize: 12 }
+};
+
+// Хук для определения текущего устройства
+const useDevice = () => {
+  const [device, setDevice] = useState('xl');
+  
+  useEffect(() => {
+    const getDevice = () => {
+      const width = window.innerWidth;
+      for (const [key, breakpoint] of Object.entries(breakpoints).reverse()) {
+        if (width <= breakpoint) {
+          return key;
+        }
+      }
+      return 'xxl';
+    };
+    
+    setDevice(getDevice());
+    
+    const handleResize = () => setDevice(getDevice());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return device;
+};
+
+
 // Анимации для фона
 const float = keyframes`
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -342,25 +423,30 @@ const Title = styled(motion.h1)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: ${pulse} 3s ease-in-out infinite;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3),
-    0 0 30px rgba(0, 255, 255, 0.2);
+  /* animation: ${pulse} 3s ease-in-out infinite; */
+  /* text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3),
+    0 0 30px rgba(0, 255, 255, 0.2); */
   transform: translateZ(50px);
   line-height: 1.1;
+
+  @media (max-width: 1024px) {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    transform: translateZ(30px);
+  }
 
   @media (max-width: 768px) {
     font-size: clamp(1.8rem, 7vw, 4rem);
     transform: translateZ(30px);
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4), 0 0 15px rgba(0, 255, 255, 0.2);
-    filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4));
+    /* text-shadow: 0 0 8px rgba(0, 255, 255, 0.4), 0 0 15px rgba(0, 255, 255, 0.2);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4)); */
     margin-bottom: 0.8rem;
   }
 
   @media (max-width: 480px) {
     font-size: clamp(1.5rem, 8vw, 2.5rem);
     transform: none;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
-    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3));
+    /* text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3)); */
     margin-bottom: 0.5rem;
     line-height: 1.2;
   }
@@ -371,19 +457,51 @@ const Title = styled(motion.h1)`
 `;
 
 const Subtitle = styled(motion.p)`
+  /* font-size: larger; */
   font-size: clamp(1rem, 3vw, 1.8rem);
-  max-width: 800px;
+  max-width: 1600px;
   margin-bottom: 3rem;
   opacity: 0.9;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  transform: translateZ(30px) translateX(200px);
+  transform: translateZ(30px) /*translateX(200px)*/;
   font-weight: 300;
   letter-spacing: 0.5px;
 
-  @media (max-width: 768px) {
+  /* @media (max-width: 1024px) {
+    font-size: medium;
+    transform: translateZ(20px);
+  } */
+
+  @media (max-width: 1060px) {
+    font-size: clamp(2rem, 1vw, 2rem);
+    transform: translateX(-15px);
+  }
+
+  @media (max-width: 1024px) {
+
+  }
+
+  @media (max-width: 800px) {
+    font-size: 100%;
     transform: translateZ(30px);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 100%;
+    transform: translateZ(30px);
+  }
+
+  @media (max-width: 600px) {
+    /* font-size: clamp(1.8rem, 2vw, 3.5rem); */
+    font-size: 100%;
+    transform: translateZ(20px);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 100%;
+    transform: translateZ(20px);
   }
 `;
 
@@ -528,6 +646,27 @@ const Hero = () => {
   const sceneRef = useRef(null);
   const rendererRef = useRef(null);
   const animationRef = useRef(null);
+
+  const useResponsive = () => {
+    const [screenSize, setScreenSize] = useState("lg");
+
+    useEffect(() => {
+      const updateSize = () => {
+        const width = window.innerWidth;
+        if (width < 480) setScreenSize("xs");
+        else if (width < 768) setScreenSize("sm");
+        else if (width < 1024) setScreenSize("md");
+        else setScreenSize("lg");
+      };
+
+      window.addEventListener("resize", updateSize);
+      updateSize();
+
+      return () => window.removeEventListener("resize", updateSize);
+    }, []);
+
+    return screenSize;
+  };
 
   // Инициализация Three.js сцены
   useEffect(() => {
@@ -885,18 +1024,20 @@ const Hero = () => {
         <Title
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 0.7 }}
         >
           {typedText}
         </Title>
 
         <Subtitle
-          initial={{ opacity: 0, /*x: 100*/ }}
-          animate={{ opacity: 1, /*x: 0*/ }}
-          transition={{ duration: 1, delay: 0.5 }}
+          initial={{ opacity: 0 /*x: 100*/ }}
+          animate={{ opacity: 1 /*x: 0*/ }}
+          transition={{ duration: 1, delay: 1 }}
         >
-          CoreBuilder transforms your digital presence with cutting-edge,
-          bespoke websites that transcend reality and enter the digital
+          CoreBuilder transforms your digital presence 
+          with cutting-edge,
+          bespoke websites that transcend 
+          reality and enter the digital
           metaverse.
         </Subtitle>
 

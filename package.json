@@ -14,7 +14,16 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@react-three/drei": "^10.0.8",
     "@react-three/fiber": "^9.1.2",
+    "@supabase/supabase-js": "^2.49.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
     "framer-motion": "^12.9.6",
+    "helmet": "^8.1.0",
+    "lucide-react": "^0.511.0",
+    "nodemailer": "^7.0.3",
+    "path-to-regexp": "^8.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
@@ -22,7 +31,8 @@
     "react-tsparticles": "^2.12.2",
     "styled-components": "^6.1.17",
     "three": "^0.176.0",
-    "tsparticles": "^3.8.1"
+    "tsparticles": "^3.8.1",
+    "validator": "^13.15.15"
   },
   "devDependencies": {
     "@babel/core": "^7.27.3",

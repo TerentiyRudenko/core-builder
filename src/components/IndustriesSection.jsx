@@ -113,7 +113,6 @@ const IndustriesSection = () => {
   return (
     <section id="industries">
     <Container ref={ref} $count={industries.length}>
-    <h3>Scroll down</h3>
       <StickySection>
         <Background style={{ backgroundColor }} />
 
