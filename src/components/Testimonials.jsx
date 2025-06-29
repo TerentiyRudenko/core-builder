@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import avatar_1 from "../assets/users_photos/avatar_1.jpg";
+import avatar_2 from "../assets/users_photos/avatar_2.jpg";
+import avatar_3 from "../assets/users_photos/avatar_3.jpg";
 
 const testimonials = [
   {
@@ -10,21 +13,21 @@ const testimonials = [
     name: "John Smith",
     role: "CEO, TechCorp",
     text: "The team delivered our website ahead of schedule with exceptional attention to detail. Highly recommended!",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    avatar: avatar_1,
   },
   {
     id: 2,
     name: "Emily Johnson",
     role: "Marketing Director, RetailCo",
     text: "Our e-commerce site saw a 40% increase in conversions after the redesign. Brilliant work!",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    avatar: avatar_2,
   },
   {
     id: 3,
     name: "Michael Brown",
     role: "Founder, StartupX",
     text: "They handled complex API integrations flawlessly. A true partner for tech-driven solutions.",
-    avatar: "https://randomuser.me/api/portraits/men/67.jpg",
+    avatar: avatar_3,
   },
 ];
 
@@ -83,7 +86,7 @@ const Testimonials = () => {
         viewport={{ once: false }}
       >
         <SectionTitle>What Our Clients Say</SectionTitle>
-        <SectionSubtitle>Trusted by businesses worldwide</SectionSubtitle>
+        <SectionSubtitle> </SectionSubtitle>
       </motion.div>
 
       <TestimonialContainer>

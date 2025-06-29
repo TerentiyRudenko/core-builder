@@ -646,7 +646,8 @@ ${data.message || "Не указаны"}
   };
 
   return (
-    <Section id="cta-section" ref={sectionRef}>
+    <section id="contact">
+    <Section id="contact" ref={sectionRef}>
       <BackgroundOverlay />
       <Content>
         {!isFormOpen ? (
@@ -827,6 +828,7 @@ ${data.message || "Не указаны"}
         )}
       </Content>
     </Section>
+    </section>
   );
 };
 

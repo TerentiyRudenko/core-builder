@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
       <IntroSection />
       <TechnologiesSection />
       <IndustriesSection />
-      <AIIntegration />
+      {/* <AIIntegration /> */}
       <CasesSection />
       <TestimonialsSection />
       <CTA />

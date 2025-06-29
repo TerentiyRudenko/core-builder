@@ -289,10 +289,10 @@ const EnergyOrb = styled(motion.div)`
   );
   box-shadow: 0 0 50px rgba(0, 255, 255, 0.6),
     inset 0 0 50px rgba(0, 255, 255, 0.2);
-  animation: ${wave} 4s ease-in-out infinite;
+  animation: wave-animation 10s ease-in-out infinite;
   animation-delay: ${(props) => props.delay}s;
 
-  &::before {
+  /* &::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -304,6 +304,21 @@ const EnergyOrb = styled(motion.div)`
     transform: translate(-50%, -50%);
     animation: ${energyWave} 2s ease-out infinite;
     animation-delay: ${(props) => props.delay}s;
+  } */
+
+  @keyframes wave-animation {
+    0%{
+        box-shadow: 0 0 50px rgba(0, 255, 255, 0.6),
+    inset 0 0 50px rgba(0, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 100px rgba(0, 255, 255, 0.8),
+        inset 0 0 100px rgba(0, 255, 255, 0.4);
+    }
+    100% {
+      box-shadow: 0 0 50px rgba(0, 255, 255, 0.6),
+        inset 0 0 50px rgba(0, 255, 255, 0.2);
+    }
   }
 
   @media (max-width: 768px) {
@@ -610,7 +625,7 @@ const Button = styled(motion.button)`
 const ArrowDown = styled(motion.div)`
   position: absolute;
   bottom: -10px;
-  left: 48.3%;
+  left: 49%;
   font-size: 2.5rem;
   cursor: pointer;
   color: #00ffff;
@@ -638,8 +653,8 @@ const Particle = styled(motion.div)`
 
 const Hero = () => {
   const fullText = "Build. Innovate. Dominate.";
-  const [typedText, setTypedText] = useState("");
-  const [index, setIndex] = useState(0);
+  // const [typedText, setTypedText] = useState("");
+  // const [index, setIndex] = useState(0);
   const [particles, setParticles] = useState([]);
   const [matrixColumns, setMatrixColumns] = useState([]);
   const canvasRef = useRef(null);
@@ -924,15 +939,15 @@ const Hero = () => {
     scrollToSection("intro");
   };
 
-  useEffect(() => {
-    if (index < fullText.length) {
-      const timeout = setTimeout(() => {
-        setTypedText((prev) => prev + fullText[index]);
-        setIndex(index + 1);
-      }, 20);
-      return () => clearTimeout(timeout);
-    }
-  }, [index]);
+  // useEffect(() => {
+  //   if (index < fullText.length) {
+  //     const timeout = setTimeout(() => {
+  //       setTypedText((prev) => prev + fullText[index]);
+  //       setIndex(index + 1);
+  //     }, 20);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [index]);
 
   // Создание шестиугольной сетки
   const createHexPattern = () => {
@@ -1000,7 +1015,7 @@ const Hero = () => {
         <EnergyOrb delay={0.2} style={{ top: "20%", left: "10%" }} />
         <EnergyOrb delay={0.5} style={{ top: "70%", left: "80%" }} />
 
-        <FloatingShape
+        {/* <FloatingShape
           color="#00ffff"
           size={40}
           duration={8}
@@ -1014,10 +1029,10 @@ const Hero = () => {
           delay={0.3}
           rounded
           style={{ top: "60%", left: "15%" }}
-        />
+        /> */}
 
-        <RotatingRing top={20} left={80} />
-        <RotatingRing top={70} left={20} />
+        {/* <RotatingRing top={20} left={80} />
+        <RotatingRing top={70} left={20} /> */}
       </BackgroundElements>
 
       <ContentWrapper>
@@ -1026,7 +1041,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          {typedText}
+          {fullText}
         </Title>
 
         <Subtitle
@@ -1058,7 +1073,7 @@ const Hero = () => {
         </ArrowDown>
       </ContentWrapper>
 
-      <ParticleSystem>
+      {/* <ParticleSystem>
         {particles.map((particle) => (
           <Particle
             key={particle.id}
@@ -1078,7 +1093,7 @@ const Hero = () => {
             }}
           />
         ))}
-      </ParticleSystem>
+      </ParticleSystem> */}
     </HeroSection>
   );
 };
