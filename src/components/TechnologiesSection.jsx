@@ -10,6 +10,7 @@ import TypeScriptIcon from "@assets/typescript.png";
 import WordPressIcon from "@assets/wordpress.png";
 import nextjsIcon from "@assets/next-js.svg";
 import framerMotionIcon from "@assets/framerMotion.svg";
+import sql from "@assets/sql.png";
 import cssIcon from "@assets/css.png";
 
 const Section = styled.section`
@@ -124,7 +125,7 @@ const technologies = [
   },
   {
     name: 'SQL',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/MySQL.svg/1200px-MySQL.svg.png',
+    image: sql,
     description: 'A standard language for managing and manipulating databases.',
   }
 ];

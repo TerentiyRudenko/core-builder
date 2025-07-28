@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { createClient } from "@supabase/supabase-js";
 
 // Initialize Supabase client
-const supabaseUrl = "https://cjmgacitkjxwvltzjauh.supabase.co"; // Replace with your Supabase project URL
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqbWdhY2l0a2p4d3ZsdHpqYXVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5NzAyMzIsImV4cCI6MjA2NDU0NjIzMn0.55x0KWcdhejqCpll0inQIsaP5q0XOlwhOiuvSpDXTBY"; // Replace with your Supabase public API key
+const supabaseUrl = "https://krsigsnulexcupciwabb.supabase.co"; // Replace with your Supabase project URL
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtyc2lnc251bGV4Y3VwY2l3YWJiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTI5OTMzOSwiZXhwIjoyMDY2ODc1MzM5fQ.sB5dpXfQJ-sp5NRGTHKZx-Qc_nG-lTw874CWuhorJHQ"; // Replace with your Supabase public API key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Section = styled.section`
@@ -555,7 +555,7 @@ ${data.message || "Не указаны"}
       setShowSuccess(true);
       setSubmitStatus({
         type: "success",
-        message: "Заявка успешно отправлена! Мы свяжемся с вами в течение 24 часов.",
+        message: "Request sent successfully! We will contact you within 24 hours.",
       });
 
       // Automatically close the form and scroll to top after 4 seconds
@@ -576,7 +576,7 @@ ${data.message || "Не указаны"}
       console.error("Submission error:", error);
       setSubmitStatus({
         type: "error",
-        message: `Ошибка отправки: ${error.message}. Пожалуйста, попробуйте еще раз.`,
+        message: `Submission error: ${error.message}. Please try again.`,
       });
     } finally {
       setIsSubmitting(false);
@@ -667,18 +667,18 @@ ${data.message || "Не указаны"}
             <SuccessIcon>
               <CheckCircle />
             </SuccessIcon>
-            <SuccessTitle>Заявка отправлена!</SuccessTitle>
+            <SuccessTitle>Request sent!</SuccessTitle>
             <SuccessMessage>
-              Спасибо за ваш интерес к нашим услугам! Мы получили вашу заявку и свяжемся с вами в течение 24 часов для обсуждения деталей проекта.
+              Thank you for your interest in our services! We have received your request and will contact you within 24 hours to discuss your project details.
             </SuccessMessage>
             <ButtonGroup>
               <Button primary onClick={handleNewRequest}>
                 <Send />
-                Отправить еще одну заявку
+                Send another request
               </Button>
               <Button onClick={scrollToTop}>
                 <ArrowUp />
-                Закрыть
+                Close
               </Button>
             </ButtonGroup>
           </SuccessContainer>
@@ -793,7 +793,7 @@ ${data.message || "Не указаны"}
                   {isSubmitting ? (
                     <>
                       <Loader2 style={{ animation: "spin 1s linear infinite" }} />
-                      Отправка...
+                      Sending...
                     </>
                   ) : (
                     <>

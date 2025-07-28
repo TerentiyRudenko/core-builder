@@ -6,29 +6,24 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import avatar_1 from "../assets/users_photos/avatar_1.jpg";
 import avatar_2 from "../assets/users_photos/avatar_2.jpg";
 import avatar_3 from "../assets/users_photos/avatar_3.jpg";
+import new_avatar_1 from "../assets/users_photos/new_avatar_1.png";
+import new_avatar_2 from "../assets/users_photos/new_avatar_2.png";
 
 const testimonials = [
   {
     id: 1,
     name: "John Smith",
-    role: "CEO, TechCorp",
-    text: "The team delivered our website ahead of schedule with exceptional attention to detail. Highly recommended!",
-    avatar: avatar_1,
+    role: "CEO, LunarAliens",
+    text: "The team delivered our website ahead of schedule with exceptional attention to detail.",
+    avatar: new_avatar_1,
   },
   {
     id: 2,
     name: "Emily Johnson",
-    role: "Marketing Director, RetailCo",
-    text: "Our e-commerce site saw a 40% increase in conversions after the redesign. Brilliant work!",
-    avatar: avatar_2,
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    role: "Founder, StartupX",
-    text: "They handled complex API integrations flawlessly. A true partner for tech-driven solutions.",
-    avatar: avatar_3,
-  },
+    role: "Marketing Director, GoalTime",
+    text: "Our news site saw a 40% increase in conversions after the redesign.",
+    avatar: new_avatar_2,
+  }
 ];
 
 const Testimonials = () => {
@@ -115,7 +110,7 @@ const Testimonials = () => {
               transition={{ delay: 0.2 }}
             />
             <TestimonialText>"{testimonials[currentIndex].text}"</TestimonialText>
-            <ClientName>{testimonials[currentIndex].name}</ClientName>
+            {/* <ClientName>{testimonials[currentIndex].name}</ClientName> */}
             <ClientRole>{testimonials[currentIndex].role}</ClientRole>
           </TestimonialCard>
         </AnimatePresence>

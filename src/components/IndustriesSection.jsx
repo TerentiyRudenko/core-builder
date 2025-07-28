@@ -280,7 +280,7 @@ const ProgressBarFill = styled(motion.div)`
 const industries = [
   {
     name: 'Artificial Intelligence',
-    description: 'We build intelligent systems that automate, optimize, and predict to give your business a competitive edge.',
+    description: 'We integrate any neural networks into your products to automate, optimize, and predict — giving your business a competitive edge.',
     color: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
     accent: '#00c3ff',
   },

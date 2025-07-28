@@ -993,6 +993,7 @@ const Hero = () => {
   };
 
   return (
+    <section id="hero">
     <HeroSection>
       {/* <ThreeJSCanvas ref={canvasRef} /> */}
 
@@ -1095,6 +1096,7 @@ const Hero = () => {
         ))}
       </ParticleSystem> */}
     </HeroSection>
+    </section>
   );
 };
 

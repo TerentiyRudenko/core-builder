@@ -11,16 +11,16 @@ import { Link } from "react-router-dom";
 import goaltime_tablet from "@assets/cases-images/goaltime.png";
 import goaltime_phone from "@assets/cases-images/goaltime_screen_2.png";
 import lunaraliens_tablet from "@assets/cases-images/lunaraliens_screen_1.png";
-import lunaraliens_phone from "@assets/cases-images/lunaraliens_screen_2.png";
+import lunaraliens_phone from "@assets/cases-images/lunaraliens_phone_screen.png";
 import { ComingSoonButton } from "../ComingSoonButton";
 
 // Breakpoints
 const breakpoints = {
-  mobile: '480px',
-  tablet: '768px',
-  desktop: '1024px',
-  large: '1200px',
-  xlarge: '1400px'
+  mobile: "480px",
+  tablet: "768px",
+  desktop: "1024px",
+  large: "1200px",
+  xlarge: "1400px",
 };
 
 // Media queries helper
@@ -29,7 +29,7 @@ const media = {
   tablet: `@media (max-width: ${breakpoints.tablet})`,
   desktop: `@media (min-width: ${breakpoints.desktop})`,
   large: `@media (min-width: ${breakpoints.large})`,
-  xlarge: `@media (min-width: ${breakpoints.xlarge})`
+  xlarge: `@media (min-width: ${breakpoints.xlarge})`,
 };
 
 // Оптимизированные анимации с уменьшенной интенсивностью
@@ -375,7 +375,7 @@ const CaseTitle = styled(motion.h3)`
   ${media.mobile} {
     font-size: clamp(1.3rem, 5vw, 1.8rem);
     margin-bottom: 1rem;
-    
+
     &::after {
       width: 60px;
       height: 1.5px;
@@ -386,7 +386,7 @@ const CaseTitle = styled(motion.h3)`
   ${media.xlarge} {
     font-size: clamp(2rem, 3vw, 2.8rem);
     margin-bottom: 2rem;
-    
+
     &::after {
       width: 120px;
       height: 3px;
@@ -436,7 +436,8 @@ const DeviceShowcase = styled(motion.div)`
   }
 
   .phone-container {
-    transform: translateX(60px) rotateY(-10deg) rotateX(-1deg) translateZ(30px) scale(0.9);
+    transform: translateX(60px) rotateY(-10deg) rotateX(-1deg) translateZ(30px)
+      scale(0.9);
     z-index: 2;
   }
 
@@ -476,7 +477,8 @@ const DeviceShowcase = styled(motion.div)`
     }
 
     .phone-container {
-      transform: translateX(80px) rotateY(-12deg) rotateX(-2deg) translateZ(40px) scale(1.05);
+      transform: translateX(80px) rotateY(-12deg) rotateX(-2deg)
+        translateZ(40px) scale(1.05);
     }
   }
 `;
@@ -487,11 +489,13 @@ const DeviceContainer = styled(motion.div)`
   transition: transform 0.3s ease;
 
   &:hover {
-    transform: translateX(-80px) rotateY(15deg) rotateX(2deg) scale(0.9) translateZ(10px) !important;
+    transform: translateX(-80px) rotateY(15deg) rotateX(2deg) scale(0.9)
+      translateZ(10px) !important;
   }
 
   &.phone-container:hover {
-    transform: translateX(60px) rotateY(-10deg) rotateX(-1deg) translateZ(40px) scale(0.95) !important;
+    transform: translateX(60px) rotateY(-10deg) rotateX(-1deg) translateZ(40px)
+      scale(0.95) !important;
   }
 
   ${media.mobile} {
@@ -575,16 +579,19 @@ const DeviceScreen = styled.div`
   }
 
   ${media.mobile} {
-    border-radius: ${(props) => (props.type === "tablet" ? "0.6rem" : "1.2rem")};
+    border-radius: ${(props) =>
+      props.type === "tablet" ? "0.6rem" : "1.2rem"};
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
   }
 
   ${media.tablet} {
-    border-radius: ${(props) => (props.type === "tablet" ? "0.8rem" : "1.6rem")};
+    border-radius: ${(props) =>
+      props.type === "tablet" ? "0.8rem" : "1.6rem"};
   }
 
   ${media.xlarge} {
-    border-radius: ${(props) => (props.type === "tablet" ? "1.4rem" : "2.4rem")};
+    border-radius: ${(props) =>
+      props.type === "tablet" ? "1.4rem" : "2.4rem"};
   }
 `;
 
@@ -891,6 +898,8 @@ const CasesSection = () => {
         description:
           "A Ukrainian news site built on WordPress. With the help of automation, current news is posted there every day.",
         images: [goaltime_tablet, goaltime_phone],
+        showTablet: true,
+        showPhone: true,
       },
       {
         id: 2,
@@ -898,6 +907,8 @@ const CasesSection = () => {
         description:
           "The official website of the crypto game Lunar Aliens created on HTML/CSS/JavaScript, also the site of the pre-sale of their GRIT token on the Solana blockchain using React + TypeScript.",
         images: [lunaraliens_tablet, lunaraliens_phone],
+        showTablet: false,
+        showPhone: true,
       },
     ],
     []
@@ -914,25 +925,22 @@ const CasesSection = () => {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Оптимизированные частицы (уменьшенное количество для мобильных)
-  const particles = useMemo(
-    () => {
-      const count = isMobile ? 0 : 25;
-      return Array.from({ length: count }, (_, i) => ({
-        id: i,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        color: ["#00ffff", "#ff0080", "#3a7bd5"][Math.floor(Math.random() * 3)],
-        duration: 6 + Math.random() * 4,
-        delay: Math.random() * 2,
-      }));
-    },
-    [isMobile]
-  );
+  const particles = useMemo(() => {
+    const count = isMobile ? 0 : 25;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      color: ["#00ffff", "#ff0080", "#3a7bd5"][Math.floor(Math.random() * 3)],
+      duration: 6 + Math.random() * 4,
+      delay: Math.random() * 2,
+    }));
+  }, [isMobile]);
 
   // Оптимизированная навигация
   const scrollToIndex = useCallback(
@@ -1080,32 +1088,46 @@ const CasesSection = () => {
                   {project.description}
                 </CaseDescription>
 
-                <DeviceShowcase
+<DeviceShowcase
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                   viewport={{ once: false }}
                 >
-                  <DeviceContainer className="tablet-container">
-                    <DeviceFrame type="tablet">
-                      <DeviceScreen type="tablet">
-                        <img src={project.images[0]} alt="Tablet preview" />
-                      </DeviceScreen>
-                      <TabletHome />
-                    </DeviceFrame>
-                  </DeviceContainer>
+                  {project.showTablet && (
+                    <DeviceContainer 
+                      className="tablet-container" 
+                      style={{ 
+                        marginLeft: project.id === 1 ? "-120px" : "-10px" 
+                      }}
+                    >
+                      <DeviceFrame type="tablet">
+                        <DeviceScreen type="tablet">
+                          <img src={project.images[0]} alt="Tablet preview" />
+                        </DeviceScreen>
+                        <TabletHome />
+                      </DeviceFrame>
+                    </DeviceContainer>
+                  )}
 
-                  <DeviceContainer className="phone-container">
-                    <DeviceFrame type="phone">
-                      <DeviceScreen type="phone">
-                        <img src={project.images[1]} alt="Phone preview" />
-                      </DeviceScreen>
-                      <PhoneHome />
-                      <PhoneSpeaker />
-                    </DeviceFrame>
-                  </DeviceContainer>
+                  {project.showPhone && (
+                    <DeviceContainer 
+                      className="phone-container" 
+                      style={{ 
+                        marginLeft: project.id === 1 ? "20px" : "-150px" 
+                      }}
+                    >
+                      <DeviceFrame type="phone">
+                        <DeviceScreen type="phone">
+                          <img src={project.images[1]} alt="Phone preview" />
+                        </DeviceScreen>
+                        <PhoneHome />
+                        <PhoneSpeaker />
+                      </DeviceFrame>
+                    </DeviceContainer>
+                  )}
                 </DeviceShowcase>
-                <ComingSoonButton/>
+                <ComingSoonButton />
                 {/* <LearnMoreLink to={`/cases/${project.id}`}>
                   <LearnMoreButton
                     whileHover={{ scale: isMobile ? 1 : 1.05 }}

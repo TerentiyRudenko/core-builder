@@ -16,7 +16,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   
       <BrowserRouter>
         {" "}
-        {/* оберни App в BrowserRouter */}
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<App />} />

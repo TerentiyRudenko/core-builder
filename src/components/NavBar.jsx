@@ -117,9 +117,9 @@ const Container = styled.div`
 
 const menuItems = [
   { label: 'Home', target: 'hero' },
-  { label: 'Our cases', target: 'cases' },
-  { label: 'Industries', target: 'industries' },
   { label: 'Technologies', target: 'tech' },
+  { label: 'Industries', target: 'industries' },
+  { label: 'Our cases', target: 'cases' },
   { label: 'Contact', target: 'contact' }
 ];
 
